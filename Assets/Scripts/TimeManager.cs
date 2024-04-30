@@ -21,7 +21,11 @@ public class TimeManager : MonoBehaviour
         while (true)
         {
             TimeSeconds++;
-            if (TimeSeconds >= 60) TimeMinuts++;
+            if (TimeSeconds >= 60)
+            {
+                TimeSeconds = 0;
+                TimeMinuts++;
+            }
 
             _uiManager.ChangeTimeUI(TimeSeconds, TimeMinuts);
              yield return new WaitForSeconds(1);

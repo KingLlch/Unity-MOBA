@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
 {
     public TextMeshProUGUI _time;
 
-   [SerializeField] private GameObject _pausePanel; 
+    [SerializeField] private GameObject _pausePanel;
 
     private void Awake()
     {
