@@ -44,5 +44,24 @@ public class InputController : MonoBehaviour
             Physics.Raycast(ray, out hit);
             _player.SetDestination(hit.point);
         }
+
+        if (Input.GetMouseButtonUp(0)) 
+        {
+            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            Physics.Raycast(ray, out hit);
+
+            if (hit.collider.GetComponent<Unit>())
+            {
+                _UIManager.ShowUI();
+                _UIManager.ChangeUI(hit.collider.GetComponent<Unit>().Health, hit.collider.GetComponent<Unit>().MaxHealth, hit.collider.GetComponent<Unit>().Mana, hit.collider.GetComponent<Unit>().MaxMana);
+            }
+
+            else
+            {
+                _UIManager.HideUI();
+            }
+        }
     }
 }

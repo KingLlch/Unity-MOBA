@@ -1,14 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using UnityEngine.UIElements;
+using UnityEditor;
+using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
     public TextMeshProUGUI _time;
 
     [SerializeField] private GameObject _pausePanel;
+    [SerializeField] private TextMeshProUGUI _healtUI;
+    [SerializeField] private TextMeshProUGUI _manaUI;
+    [SerializeField] private UnityEngine.UI.Image _healtImage;
+    [SerializeField] private UnityEngine.UI.Image _manaImage;
 
     private void Awake()
     {
@@ -26,5 +28,28 @@ public class UIManager : MonoBehaviour
     public void Pause(bool isPaused)
     {
         _pausePanel.SetActive(isPaused);
+    }
+
+    public void HideUI()
+    {
+        _healtUI.text = "";
+        _manaUI.text = "";
+        _healtImage.gameObject.transform.parent.gameObject.SetActive(false);
+        _manaImage.gameObject.transform.parent.gameObject.SetActive(false);
+    }
+
+    public void ShowUI()
+    {
+        _healtImage.gameObject.transform.parent.gameObject.SetActive(true);
+        _manaImage.gameObject.transform.parent.gameObject.SetActive(true);
+    }
+
+    public void ChangeUI(int healt,int maxHealth, int mana, int maxMana)
+    {
+        _healtUI.text = healt + "/" + maxHealth;
+        _manaUI.text = mana + "/" + maxMana;
+
+        _healtImage.fillAmount = healt / maxHealth;
+        _manaImage.fillAmount = mana / maxMana;
     }
 }
