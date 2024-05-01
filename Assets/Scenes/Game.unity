@@ -1355,6 +1355,7 @@ GameObject:
   - component: {fileID: 814713758}
   - component: {fileID: 814713757}
   - component: {fileID: 814713761}
+  - component: {fileID: 814713762}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1472,6 +1473,25 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &814713762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814713756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80da367f8ee126e4ebf9643fbc81dcb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Health>k__BackingField: 100
+  <MaxHealth>k__BackingField: 0
+  <Mana>k__BackingField: 100
+  <MaxMana>k__BackingField: 0
+  <Damage>k__BackingField: 5
+  <AttackSpeed>k__BackingField: 50
+  <AttackRange>k__BackingField: 50
 --- !u!1 &864927098
 GameObject:
   m_ObjectHideFlags: 0
@@ -2003,6 +2023,7 @@ GameObject:
   - component: {fileID: 1309473637}
   - component: {fileID: 1309473636}
   - component: {fileID: 1309473635}
+  - component: {fileID: 1309473638}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Untagged
@@ -2098,6 +2119,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1309473633}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1309473638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309473633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80da367f8ee126e4ebf9643fbc81dcb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Health>k__BackingField: 1000
+  <MaxHealth>k__BackingField: 0
+  <Mana>k__BackingField: 0
+  <MaxMana>k__BackingField: 0
+  <Damage>k__BackingField: 0
+  <AttackSpeed>k__BackingField: 0
+  <AttackRange>k__BackingField: 0
 --- !u!1 &1328966802
 GameObject:
   m_ObjectHideFlags: 0
@@ -3396,10 +3436,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _time: {fileID: 2087581013}
   _pausePanel: {fileID: 339535529}
-  _healtUI: {fileID: 0}
-  _manaUI: {fileID: 0}
-  _healtImage: {fileID: 0}
-  _manaImage: {fileID: 0}
+  _heroImage: {fileID: 418533870}
+  _spels: {fileID: 1399525838}
+  _inventory: {fileID: 1967927986}
+  _healtUI: {fileID: 2031019126}
+  _manaUI: {fileID: 357313788}
+  _healtImage: {fileID: 515080715}
+  _manaImage: {fileID: 1646075942}
 --- !u!1 &1886749650
 GameObject:
   m_ObjectHideFlags: 0

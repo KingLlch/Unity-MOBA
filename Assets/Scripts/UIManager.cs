@@ -59,7 +59,9 @@ public class UIManager : MonoBehaviour
         _healtUI.text = healt + "/" + maxHealth;
         _manaUI.text = mana + "/" + maxMana;
 
-        _healtImage.fillAmount = healt / maxHealth;
-        _manaImage.fillAmount = mana / maxMana;
+        if(maxHealth != 0)
+            _healtImage.fillAmount = healt / maxHealth;
+        if (maxMana != 0)
+            _manaImage.fillAmount = mana / maxMana;
     }
 }

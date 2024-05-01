@@ -43,7 +43,27 @@ public class InputController : MonoBehaviour
             RaycastHit hit;
 
             Physics.Raycast(ray, out hit);
-            _player.SetDestination(hit.point);
+
+            if (hit.collider.gameObject.GetComponent<Unit>())
+            {
+                if (Vector3.Distance(_player.transform.position, hit.collider.gameObject.transform.position) > _player.GetComponent<Unit>().AttackRange / 10)
+                {
+                    Vector3 point = hit.collider.gameObject.transform.position - ((hit.collider.gameObject.transform.position - _player.transform.position).normalized * _player.GetComponent<Unit>().AttackRange / 10);
+                    _player.SetDestination(new Vector3(point.x,0, point.z));
+
+                    //атака как подойдет
+                }
+
+                else
+                {
+                    hit.collider.gameObject.GetComponent<Unit>().ApplyDamage(_player.GetComponent<Unit>().Damage);
+                    //атака
+                }
+            }
+            else
+            {
+                _player.SetDestination(hit.point);
+            }
         }
 
         if (Input.GetMouseButtonUp(0)) 
@@ -57,7 +77,7 @@ public class InputController : MonoBehaviour
             {
                 _UIManager.ShowUI();
                 _UIManager.ChangeUI(hit.collider.GetComponent<Unit>().Health, hit.collider.GetComponent<Unit>().MaxHealth, hit.collider.GetComponent<Unit>().Mana, hit.collider.GetComponent<Unit>().MaxMana);
-                _isHeroSelect = true;
+                if (hit.collider.gameObject.name == "Player") _isHeroSelect = true;
             }
 
             else

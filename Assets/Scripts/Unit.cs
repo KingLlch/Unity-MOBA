@@ -10,6 +10,10 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
     [field: SerializeField] public int Mana { get; private set; } = 100;
     [field: SerializeField] public int MaxMana { get; private set; }
 
+    [field: SerializeField] public int Damage { get; private set; } = 5;
+    [field: SerializeField] public int AttackSpeed { get; private set; } = 50;
+    [field: SerializeField] public int AttackRange { get; private set; } = 50;
+
     private void Awake()
     {
         MaxHealth = Health;
