@@ -10,6 +10,7 @@ public class InputController : MonoBehaviour
 
     private Camera _mainCamera;
     private NavMeshAgent _player;
+    private bool _isHeroSelect = true;
 
     private void Awake()
     {
@@ -36,7 +37,7 @@ public class InputController : MonoBehaviour
             _UIManager.Pause(_timeManager.IsPaused);
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if ((Input.GetMouseButtonDown(1)) &&(_isHeroSelect))
         {
             Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -56,11 +57,13 @@ public class InputController : MonoBehaviour
             {
                 _UIManager.ShowUI();
                 _UIManager.ChangeUI(hit.collider.GetComponent<Unit>().Health, hit.collider.GetComponent<Unit>().MaxHealth, hit.collider.GetComponent<Unit>().Mana, hit.collider.GetComponent<Unit>().MaxMana);
+                _isHeroSelect = true;
             }
 
             else
             {
                 _UIManager.HideUI();
+                _isHeroSelect = false;
             }
         }
     }
