@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using DG.Tweening;
 using UnityEngine;
 
 public class AttackParticle : MonoBehaviour
@@ -13,6 +11,7 @@ public class AttackParticle : MonoBehaviour
         if (collision.gameObject == target.gameObject)
         {
             target.GetComponent<Unit>().ApplyDamage(startUnit.Damage);
+            gameObject.transform.DOKill();
             Destroy(gameObject);    
         }
     }

@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using DG.Tweening;
-using UnityEngine.UIElements;
-using UnityEditor.SceneManagement;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Unit : MonoBehaviour, IDamageable, IHealable
 {
@@ -18,10 +17,13 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
 
     [field: SerializeField] public int Damage { get; private set; } = 5;
     [field: SerializeField] public int AttackSpeed { get; private set; } = 50;
-    [field: SerializeField] public int AttackRange { get; private set; } = 50;
+    [field: SerializeField] public int AttackRange { get; private set; } = 10;
     [field: SerializeField] public int ParticleSpeed { get; private set; } = 10;
 
     [SerializeField] private GameObject AttackParticlePrefab;
+    public bool IsAttacking;
+
+    [HideInInspector] public UnityEvent<Unit> ChangeHealthOrMana;
 
     private void Awake()
     {
@@ -39,33 +41,31 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
         {
             Destroy(gameObject);
         }
+
+        ChangeHealthOrMana.Invoke(GetComponent<Unit>());
     }
 
     public void ApplyHeal(int heal)
     {
         Health += heal;
+        ChangeHealthOrMana.Invoke(GetComponent<Unit>());
     }
 
     public void ApplyManaHeal(int mana)
     {
         Mana += mana;
+        ChangeHealthOrMana.Invoke(GetComponent<Unit>());
     }
 
-    public void Attack(Transform target,float distance)
+    public IEnumerator AttackCorutine(GameObject target)
     {
-        StartCoroutine(AttackCorutine(target, distance));
-    }
-
-    public IEnumerator AttackCorutine(Transform target, float distance)
-    {
-        while ((true) && (distance <= AttackRange))
+        while ((true) && (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange))
         {
-            GameObject attackParticle;
-
-            attackParticle = Instantiate(AttackParticlePrefab,transform.position,Quaternion.identity,null);
-            attackParticle.GetComponent<AttackParticle>().target = target;
+            IsAttacking = true;
+            GameObject attackParticle = Instantiate(AttackParticlePrefab,transform.position,Quaternion.identity,null);
+            attackParticle.GetComponent<AttackParticle>().target = target.transform;
             attackParticle.GetComponent<AttackParticle>().startUnit = transform.GetComponent<Unit>();
-            attackParticle.transform.DOMove(target.position, distance / ParticleSpeed);
+            attackParticle.transform.DOMove(target.transform.position, Vector3.Distance(gameObject.transform.position, target.transform.position) / ParticleSpeed);
 
             yield return new WaitForSeconds(100/AttackSpeed);
         }
@@ -75,8 +75,10 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
     {
         while (true)
         {
-            ApplyHeal(HealthRegen);
-            ApplyManaHeal(ManaRegen);
+            if (Health<MaxHealth) ApplyHeal(HealthRegen);
+            if (Mana < MaxMana) ApplyManaHeal(ManaRegen);
+
+            ChangeHealthOrMana.Invoke(GetComponent<Unit>());
 
             yield return new WaitForSeconds(1f);
         }

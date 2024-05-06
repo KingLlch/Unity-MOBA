@@ -1,10 +1,11 @@
+using System;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public TextMeshProUGUI _time;
+    private InputController _inputController;
+    private TextMeshProUGUI _time;
 
     [SerializeField] private GameObject _pausePanel;
     [SerializeField] private GameObject _heroImage;
@@ -20,6 +21,10 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         _time = GameObject.Find("MainCanvas/MainPanel/TimePanel/TimeText").GetComponent<TextMeshProUGUI>();
+        _inputController = FindObjectOfType<InputController>();
+        _inputController.SelectUnit.AddListener(SelectUnit);
+        _inputController.ChangeSelectUnit.AddListener(ChangeSelectUnit);
+        _inputController.DeSelectUnit.AddListener(DeSelectUnit);
     }
 
     public void ChangeTimeUI(int timeSeconds, int timeMinuts)
@@ -60,17 +65,34 @@ public class UIManager : MonoBehaviour
         _inventory.SetActive(true);
     }
 
-    public void ChangeUI(int healt,int maxHealth, int mana, int maxMana, int healthRegen, int manaRegen)
+    public void ChangeUI(Unit unit)
     {
-        _healtUI.text = healt + "/" + maxHealth;
-        _manaUI.text = mana + "/" + maxMana;
+        _healtUI.text = unit.Health + "/" + unit.MaxHealth;
+        _manaUI.text = unit.Mana + "/" + unit.MaxMana;
 
-        _healtRegenUI.text = healthRegen.ToString();
-        _manaRegenUI.text = manaRegen.ToString();
+        _healtRegenUI.text = "+" + unit.HealthRegen;
+        _manaRegenUI.text = "+" + unit.ManaRegen;
 
-        if (maxHealth != 0)
-            _healtImage.fillAmount = healt / maxHealth;
-        if (maxMana != 0)
-            _manaImage.fillAmount = mana / maxMana;
+        if (unit.MaxHealth != 0)
+            _healtImage.fillAmount = unit.Health / unit.MaxHealth;
+        if (unit.MaxMana != 0)
+            _manaImage.fillAmount = unit.Mana / unit.MaxMana;
+    }
+
+    private void SelectUnit(Unit unit)
+    {
+        ShowUI();
+        ChangeUI(unit);
+        unit.ChangeHealthOrMana.AddListener(ChangeUI);
+    }
+
+    private void ChangeSelectUnit(Unit unit)
+    {
+        unit.ChangeHealthOrMana.RemoveAllListeners();
+    }
+
+    private void DeSelectUnit()
+    {
+        HideUI();
     }
 }
