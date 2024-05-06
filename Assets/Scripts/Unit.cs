@@ -2,7 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEditor.Experimental.GraphView.GraphView;
+using UnityEngine.AI;
 
 public class Unit : MonoBehaviour, IDamageable, IHealable
 {
@@ -24,6 +24,10 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
     public bool IsAttacking;
 
     [HideInInspector] public UnityEvent<Unit> ChangeHealthOrMana;
+
+    private Coroutine _attackCoroutine;
+    private Coroutine _moveAttackCoroutine;
+    private bool _attackCoroutineActive;
 
     private void Awake()
     {
@@ -57,17 +61,51 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
         ChangeHealthOrMana.Invoke(GetComponent<Unit>());
     }
 
+    public void MoveToAttack(GameObject target)
+    {
+       _moveAttackCoroutine = StartCoroutine(MoveAttackCorutine(target));
+    }
+    public void Attack(GameObject target)
+    {
+       _attackCoroutine = StartCoroutine(MoveAttackCorutine(target));
+    }
+
     public IEnumerator AttackCorutine(GameObject target)
     {
-        while ((true) && (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange))
+        while (true)
         {
-            IsAttacking = true;
-            GameObject attackParticle = Instantiate(AttackParticlePrefab,transform.position,Quaternion.identity,null);
-            attackParticle.GetComponent<AttackParticle>().target = target.transform;
-            attackParticle.GetComponent<AttackParticle>().startUnit = transform.GetComponent<Unit>();
-            attackParticle.transform.DOMove(target.transform.position, Vector3.Distance(gameObject.transform.position, target.transform.position) / ParticleSpeed);
+            if (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange)
+            {
+                GameObject attackParticle = Instantiate(AttackParticlePrefab, transform.position, Quaternion.identity, null);
+                attackParticle.GetComponent<AttackParticle>().target = target.transform;
+                attackParticle.GetComponent<AttackParticle>().startUnit = transform.GetComponent<Unit>();
+                attackParticle.transform.DOMove(target.transform.position, Vector3.Distance(gameObject.transform.position, target.transform.position) / ParticleSpeed);
 
-            yield return new WaitForSeconds(100/AttackSpeed);
+                yield return new WaitForSeconds(100 / AttackSpeed);
+            }
+        }
+    }
+
+    public IEnumerator MoveAttackCorutine(GameObject target)
+    {
+        IsAttacking = true;
+
+        while (true)
+        {
+            if (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange)
+            {
+                StopCoroutine(_attackCoroutine);
+                _attackCoroutineActive = false;
+                Vector3 point = target.transform.position - ((target.transform.position - transform.position).normalized * AttackRange);
+                gameObject.GetComponent<NavMeshAgent>().SetDestination(new Vector3(point.x, 0, point.z));
+
+                yield return null;
+            }
+
+            else if (!_attackCoroutineActive)
+            {
+                _attackCoroutine = StartCoroutine(AttackCorutine(target));
+            }
         }
     }
 
@@ -75,12 +113,22 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
     {
         while (true)
         {
-            if (Health<MaxHealth) ApplyHeal(HealthRegen);
+            if (Health < MaxHealth) ApplyHeal(HealthRegen);
             if (Mana < MaxMana) ApplyManaHeal(ManaRegen);
 
             ChangeHealthOrMana.Invoke(GetComponent<Unit>());
 
             yield return new WaitForSeconds(1f);
         }
+    }
+
+    public void Move(Vector3 target)
+    {
+        if (_attackCoroutine != null)
+            StopCoroutine(_attackCoroutine);
+        if (_moveAttackCoroutine != null)
+            StopCoroutine(_moveAttackCoroutine);
+
+        gameObject.GetComponent<NavMeshAgent>().SetDestination(new Vector3(target.x, gameObject.transform.position.y, target.z));
     }
 }

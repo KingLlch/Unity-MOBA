@@ -10,7 +10,7 @@ public class InputController : MonoBehaviour
     [SerializeField] private UIManager _UIManager;
 
     private Camera _mainCamera;
-    private NavMeshAgent _player;
+    private GameObject _player;
     private bool _isHeroSelect = true;
     private Unit selectedUnit;
 
@@ -18,12 +18,10 @@ public class InputController : MonoBehaviour
     [HideInInspector] public UnityEvent<Unit> ChangeSelectUnit;
     [HideInInspector] public UnityEvent DeSelectUnit;
 
-    private Coroutine AttackCoroutine;
-
     private void Awake()
     {
         _mainCamera = Camera.main;
-        _player = GameObject.Find("Player").GetComponent<NavMeshAgent>();
+        _player = GameObject.Find("Player");
     }
 
     private void Update()
@@ -56,25 +54,18 @@ public class InputController : MonoBehaviour
             {
                 if (Vector3.Distance(_player.transform.position, hit.collider.gameObject.transform.position) > _player.GetComponent<Unit>().AttackRange)
                 {
-                    Vector3 point = hit.collider.gameObject.transform.position - ((hit.collider.gameObject.transform.position - _player.transform.position).normalized * _player.GetComponent<Unit>().AttackRange);
-                    _player.SetDestination(new Vector3(point.x,0, point.z));
+                    _player.GetComponent<Unit>().MoveToAttack(hit.collider.gameObject);
                 }
 
-                if (!_player.GetComponent<Unit>().IsAttacking)
+                else if (!_player.GetComponent<Unit>().IsAttacking)
                 {
-                    AttackCoroutine = StartCoroutine(_player.GetComponent<Unit>().AttackCorutine(hit.collider.gameObject));
+                    _player.GetComponent<Unit>().Attack(hit.collider.gameObject);
                 }
 
             }
             else
             {
-                if (AttackCoroutine != null)
-                {
-                    _player.GetComponent<Unit>().StopCoroutine(AttackCoroutine);
-                    _player.GetComponent<Unit>().IsAttacking = false;
-                }
-
-                _player.SetDestination(hit.point);
+                _player.GetComponent<Unit>().Move(hit.point);
             }
         }
 
