@@ -8,12 +8,12 @@ public class AttackParticle : MonoBehaviour
     public Unit startUnit;
     public Transform target;
 
-    private void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        if(transform == target)
+        if (collision.gameObject == target.gameObject)
         {
             target.GetComponent<Unit>().ApplyDamage(startUnit.Damage);
-            Destroy(gameObject);
+            Destroy(gameObject);    
         }
     }
 }

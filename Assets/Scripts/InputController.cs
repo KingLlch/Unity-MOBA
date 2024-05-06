@@ -51,7 +51,7 @@ public class InputController : MonoBehaviour
                     Vector3 point = hit.collider.gameObject.transform.position - ((hit.collider.gameObject.transform.position - _player.transform.position).normalized * _player.GetComponent<Unit>().AttackRange / 10);
                     _player.SetDestination(new Vector3(point.x,0, point.z));
 
-                    _player.GetComponent<Unit>().Attack(hit.collider.gameObject.transform, Vector3.Distance(_player.transform.position, hit.collider.gameObject.transform.position));
+                    //_player.GetComponent<Unit>().Attack(hit.collider.gameObject.transform, Vector3.Distance(_player.transform.position, hit.collider.gameObject.transform.position));
                 }
 
                 else
