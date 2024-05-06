@@ -1,8 +1,7 @@
-using DG.Tweening;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class Unit : MonoBehaviour, IDamageable, IHealable
 {
@@ -16,7 +15,7 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
 
 
     [field: SerializeField] public int Damage { get; private set; } = 5;
-    [field: SerializeField] public int AttackSpeed { get; private set; } = 50;
+    [field: SerializeField] public int AttackSpeed { get; private set; } = 100;
     [field: SerializeField] public int AttackRange { get; private set; } = 10;
     [field: SerializeField] public int ParticleSpeed { get; private set; } = 10;
 
@@ -62,38 +61,35 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
 
     public void MoveToAttack(GameObject target)
     {
-        if (_moveAttackCoroutine == null)
-            _moveAttackCoroutine = StartCoroutine(MoveAttackCorutine(target));
-        else
+        if (_moveAttackCoroutine != null)
         {
             StopCoroutine(_moveAttackCoroutine);
-            _moveAttackCoroutine = StartCoroutine(MoveAttackCorutine(target));
         }
+
+        _moveAttackCoroutine = StartCoroutine(MoveAttackCorutine(target));
     }
     public void Attack(GameObject target)
     {
-        if (_attackCoroutine == null)
-            _attackCoroutine = StartCoroutine(AttackCorutine(target));
-        else
+        if (_attackCoroutine != null)
         {
             StopCoroutine(_attackCoroutine);
-            _attackCoroutine = StartCoroutine(AttackCorutine(target));
         }
+
+        _attackCoroutine = StartCoroutine(AttackCorutine(target));
     }
 
     public IEnumerator AttackCorutine(GameObject target)
     {
-        while (true)
+        while (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange + 0.1)
         {
-            if (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange)
-            {
-                GameObject attackParticle = Instantiate(AttackParticlePrefab, transform.position, Quaternion.identity, null);
-                attackParticle.GetComponent<AttackParticle>().target = target.transform;
-                attackParticle.GetComponent<AttackParticle>().startUnit = transform.GetComponent<Unit>();
-                attackParticle.transform.DOMove(target.transform.position, Vector3.Distance(gameObject.transform.position, target.transform.position) / ParticleSpeed);
+            GameObject attackParticle = Instantiate(AttackParticlePrefab, transform.position, Quaternion.identity, null);
 
-                yield return new WaitForSeconds(100 / AttackSpeed);
-            }
+            attackParticle.GetComponent<AttackParticle>().Target = target;
+            attackParticle.GetComponent<AttackParticle>().StartUnit = transform.GetComponent<Unit>();
+            attackParticle.GetComponent<AttackParticle>().Speed = ParticleSpeed;
+            StartCoroutine(attackParticle.GetComponent<AttackParticle>().MoveParticle());
+
+            yield return new WaitForSeconds(100 / AttackSpeed);
         }
     }
 
@@ -103,7 +99,7 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
 
         while (true)
         {
-            if (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange)
+            if (Vector3.Distance(gameObject.transform.position, target.transform.position) >= AttackRange)
             {
                 if (_attackCoroutine != null)
                 {
@@ -114,13 +110,14 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
                 Vector3 point = target.transform.position - ((target.transform.position - transform.position).normalized * AttackRange);
                 gameObject.GetComponent<NavMeshAgent>().SetDestination(new Vector3(point.x, gameObject.transform.position.y, point.z));
 
-                yield return new WaitForSeconds(5f);
             }
 
-            else
+            else if (_attackCoroutine == null)
             {
                 Attack(target);
             }
+
+            yield return new WaitForSeconds(0.5f);
         }
     }
 

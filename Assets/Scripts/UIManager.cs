@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -29,7 +28,7 @@ public class UIManager : MonoBehaviour
 
     public void ChangeTimeUI(int timeSeconds, int timeMinuts)
     {
-        if ((timeSeconds < 10) && (timeMinuts<10)) _time.text = "0" + timeMinuts + ":0" + timeSeconds;
+        if ((timeSeconds < 10) && (timeMinuts < 10)) _time.text = "0" + timeMinuts + ":0" + timeSeconds;
         else if (timeMinuts < 10) _time.text = "0" + timeMinuts + ":" + timeSeconds;
         else if (timeSeconds < 10) _time.text = timeMinuts + ":0" + timeSeconds;
         else _time.text = timeMinuts + ":" + timeSeconds;
@@ -88,6 +87,7 @@ public class UIManager : MonoBehaviour
 
     private void ChangeSelectUnit(Unit unit)
     {
+        if (unit != null)
         unit.ChangeHealthOrMana.RemoveAllListeners();
     }
 

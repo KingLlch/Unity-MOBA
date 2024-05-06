@@ -17,7 +17,7 @@ public class TimeManager : MonoBehaviour
 
     private IEnumerator TimeChange()
     {
-        if (IsPaused) { yield return null;}
+        if (IsPaused) { yield return null; }
         while (true)
         {
             TimeSeconds++;
@@ -28,7 +28,7 @@ public class TimeManager : MonoBehaviour
             }
 
             _uiManager.ChangeTimeUI(TimeSeconds, TimeMinuts);
-             yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1);
         }
     }
 }

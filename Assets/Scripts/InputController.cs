@@ -1,8 +1,5 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Events;
-using System.Collections;
 
 public class InputController : MonoBehaviour
 {
@@ -60,7 +57,7 @@ public class InputController : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0)) 
+        if (Input.GetMouseButtonUp(0))
         {
             Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -68,14 +65,14 @@ public class InputController : MonoBehaviour
             Physics.Raycast(ray, out hit);
             Unit unit = null;
 
-            if (hit.collider.GetComponent<Unit>()) 
-            { 
+            if (hit.collider.GetComponent<Unit>())
+            {
                 unit = hit.collider.GetComponent<Unit>();
             }
 
             if (unit != null)
             {
-                if(selectedUnit == null)
+                if (selectedUnit == null)
                 {
                     SelectUnit.Invoke(unit);
                     selectedUnit = unit;
