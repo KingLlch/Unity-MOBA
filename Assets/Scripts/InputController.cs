@@ -72,11 +72,12 @@ public class InputController : MonoBehaviour
             RaycastHit hit;
 
             Physics.Raycast(ray, out hit);
+            Unit unit = hit.collider.GetComponent<Unit>();
 
-            if (hit.collider.GetComponent<Unit>())
+            if (unit)
             {
                 _UIManager.ShowUI();
-                _UIManager.ChangeUI(hit.collider.GetComponent<Unit>().Health, hit.collider.GetComponent<Unit>().MaxHealth, hit.collider.GetComponent<Unit>().Mana, hit.collider.GetComponent<Unit>().MaxMana);
+                _UIManager.ChangeUI(unit.Health, unit.MaxHealth, unit.Mana, unit.MaxMana, unit.HealthRegen, unit.ManaRegen);
                 if (hit.collider.gameObject.name == "Player") _isHeroSelect = true;
             }
 

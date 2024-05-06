@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _inventory;
     [SerializeField] private TextMeshProUGUI _healtUI;
     [SerializeField] private TextMeshProUGUI _manaUI;
+    [SerializeField] private TextMeshProUGUI _healtRegenUI;
+    [SerializeField] private TextMeshProUGUI _manaRegenUI;
     [SerializeField] private UnityEngine.UI.Image _healtImage;
     [SerializeField] private UnityEngine.UI.Image _manaImage;
 
@@ -37,6 +39,10 @@ public class UIManager : MonoBehaviour
     {
         _healtUI.text = "";
         _manaUI.text = "";
+
+        _healtRegenUI.text = "";
+        _manaRegenUI.text = "";
+
         _healtImage.gameObject.transform.parent.gameObject.SetActive(false);
         _manaImage.gameObject.transform.parent.gameObject.SetActive(false);
         _spels.SetActive(false);
@@ -54,12 +60,15 @@ public class UIManager : MonoBehaviour
         _inventory.SetActive(true);
     }
 
-    public void ChangeUI(int healt,int maxHealth, int mana, int maxMana)
+    public void ChangeUI(int healt,int maxHealth, int mana, int maxMana, int healthRegen, int manaRegen)
     {
         _healtUI.text = healt + "/" + maxHealth;
         _manaUI.text = mana + "/" + maxMana;
 
-        if(maxHealth != 0)
+        _healtRegenUI.text = healthRegen.ToString();
+        _manaRegenUI.text = manaRegen.ToString();
+
+        if (maxHealth != 0)
             _healtImage.fillAmount = healt / maxHealth;
         if (maxMana != 0)
             _manaImage.fillAmount = mana / maxMana;
