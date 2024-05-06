@@ -52,16 +52,7 @@ public class InputController : MonoBehaviour
 
             if (hit.collider.gameObject.GetComponent<Unit>() && (hit.collider.gameObject != _player.gameObject))
             {
-                if (Vector3.Distance(_player.transform.position, hit.collider.gameObject.transform.position) > _player.GetComponent<Unit>().AttackRange)
-                {
-                    _player.GetComponent<Unit>().MoveToAttack(hit.collider.gameObject);
-                }
-
-                else if (!_player.GetComponent<Unit>().IsAttacking)
-                {
-                    _player.GetComponent<Unit>().Attack(hit.collider.gameObject);
-                }
-
+                _player.GetComponent<Unit>().MoveToAttack(hit.collider.gameObject);
             }
             else
             {
@@ -75,9 +66,14 @@ public class InputController : MonoBehaviour
             RaycastHit hit;
 
             Physics.Raycast(ray, out hit);
-            Unit unit = hit.collider.GetComponent<Unit>();
+            Unit unit = null;
 
-            if (unit)
+            if (hit.collider.GetComponent<Unit>()) 
+            { 
+                unit = hit.collider.GetComponent<Unit>();
+            }
+
+            if (unit != null)
             {
                 if(selectedUnit == null)
                 {

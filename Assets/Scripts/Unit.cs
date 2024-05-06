@@ -27,7 +27,6 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
 
     private Coroutine _attackCoroutine;
     private Coroutine _moveAttackCoroutine;
-    private bool _attackCoroutineActive;
 
     private void Awake()
     {
@@ -63,11 +62,23 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
 
     public void MoveToAttack(GameObject target)
     {
-       _moveAttackCoroutine = StartCoroutine(MoveAttackCorutine(target));
+        if (_moveAttackCoroutine == null)
+            _moveAttackCoroutine = StartCoroutine(MoveAttackCorutine(target));
+        else
+        {
+            StopCoroutine(_moveAttackCoroutine);
+            _moveAttackCoroutine = StartCoroutine(MoveAttackCorutine(target));
+        }
     }
     public void Attack(GameObject target)
     {
-       _attackCoroutine = StartCoroutine(MoveAttackCorutine(target));
+        if (_attackCoroutine == null)
+            _attackCoroutine = StartCoroutine(AttackCorutine(target));
+        else
+        {
+            StopCoroutine(_attackCoroutine);
+            _attackCoroutine = StartCoroutine(AttackCorutine(target));
+        }
     }
 
     public IEnumerator AttackCorutine(GameObject target)
@@ -94,17 +105,21 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
         {
             if (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange)
             {
-                StopCoroutine(_attackCoroutine);
-                _attackCoroutineActive = false;
-                Vector3 point = target.transform.position - ((target.transform.position - transform.position).normalized * AttackRange);
-                gameObject.GetComponent<NavMeshAgent>().SetDestination(new Vector3(point.x, 0, point.z));
+                if (_attackCoroutine != null)
+                {
+                    StopCoroutine(_attackCoroutine);
+                    _attackCoroutine = null;
+                }
 
-                yield return null;
+                Vector3 point = target.transform.position - ((target.transform.position - transform.position).normalized * AttackRange);
+                gameObject.GetComponent<NavMeshAgent>().SetDestination(new Vector3(point.x, gameObject.transform.position.y, point.z));
+
+                yield return new WaitForSeconds(5f);
             }
 
-            else if (!_attackCoroutineActive)
+            else
             {
-                _attackCoroutine = StartCoroutine(AttackCorutine(target));
+                Attack(target);
             }
         }
     }
@@ -125,9 +140,15 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
     public void Move(Vector3 target)
     {
         if (_attackCoroutine != null)
+        {
             StopCoroutine(_attackCoroutine);
+            _attackCoroutine = null;
+        }
         if (_moveAttackCoroutine != null)
+        {
             StopCoroutine(_moveAttackCoroutine);
+            _moveAttackCoroutine = null;
+        }
 
         gameObject.GetComponent<NavMeshAgent>().SetDestination(new Vector3(target.x, gameObject.transform.position.y, target.z));
     }
