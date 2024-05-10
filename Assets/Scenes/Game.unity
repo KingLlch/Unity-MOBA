@@ -573,6 +573,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainCameraObj: {fileID: 1182930567}
+  _cameraSpeed: 50
+  _cameraSmooth: 5
+  _scrollSpeed: 50
+  _scrollSmooth: 5
+  _screenPart: 15
 --- !u!1 &283765139
 GameObject:
   m_ObjectHideFlags: 0
@@ -1636,9 +1641,9 @@ MonoBehaviour:
   <MaxMana>k__BackingField: 0
   <ManaRegen>k__BackingField: 0
   <Damage>k__BackingField: 5
-  <AttackSpeed>k__BackingField: 50
+  <AttackSpeed>k__BackingField: 100
   <AttackRange>k__BackingField: 10
-  <ParticleSpeed>k__BackingField: 20
+  <ParticleSpeed>k__BackingField: 10
   AttackParticlePrefab: {fileID: 2024143108107892597, guid: c13fc75f5dfa76243934128ea78817ee, type: 3}
   IsAttacking: 0
   ChangeHealthOrMana:

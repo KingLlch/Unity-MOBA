@@ -40,7 +40,7 @@ public class InputController : MonoBehaviour
             _UIManager.Pause(_timeManager.IsPaused);
         }
 
-        if ((Input.GetMouseButtonDown(1)) && (_isHeroSelect))
+        if (Input.GetMouseButtonDown(1) && _isHeroSelect)
         {
             Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -55,6 +55,43 @@ public class InputController : MonoBehaviour
             {
                 _player.GetComponent<Unit>().Move(hit.point);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.A) && _isHeroSelect)
+        {
+            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            Physics.Raycast(ray, out hit);
+
+            Collider[] nearObjects = Physics.OverlapSphere(hit.transform.position, _player.GetComponent<Unit>().AttackRange);
+            Collider nearestUnit = null;
+
+            foreach (Collider collider in nearObjects)
+            {
+                if (collider.GetComponent<Unit>())
+                {              
+                    if (nearestUnit == null)
+                    nearestUnit = collider;
+
+                    else if (Vector3.Distance(collider.transform.position, hit.transform.position) < Vector3.Distance(nearestUnit.transform.position, hit.transform.position))
+                    {
+                        nearestUnit = collider;
+                    }
+                }
+            }
+
+            _player.GetComponent<Unit>().MoveToAttack(nearestUnit.gameObject);
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.M) && _isHeroSelect)
+        {
+            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            Physics.Raycast(ray, out hit);
+            _player.GetComponent<Unit>().Move(hit.point);
         }
 
         if (Input.GetMouseButtonUp(0))
