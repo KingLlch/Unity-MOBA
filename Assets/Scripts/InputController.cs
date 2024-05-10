@@ -5,6 +5,7 @@ public class InputController : MonoBehaviour
 {
     [SerializeField] private TimeManager _timeManager;
     [SerializeField] private UIManager _UIManager;
+    [SerializeField] private ParticleManager _particleManager;
 
     private Camera _mainCamera;
     private GameObject _player;
@@ -50,10 +51,12 @@ public class InputController : MonoBehaviour
             if (hit.collider.gameObject.GetComponent<Unit>() && (hit.collider.gameObject != _player.gameObject))
             {
                 _player.GetComponent<Unit>().MoveToAttack(hit.collider.gameObject);
+                _particleManager.AttackParticle(hit.point);
             }
             else
             {
                 _player.GetComponent<Unit>().Move(hit.point);
+                _particleManager.MoveParticle(hit.point);
             }
         }
 
@@ -64,24 +67,33 @@ public class InputController : MonoBehaviour
 
             Physics.Raycast(ray, out hit);
 
-            Collider[] nearObjects = Physics.OverlapSphere(hit.transform.position, _player.GetComponent<Unit>().AttackRange);
+            Collider[] nearObjects = Physics.OverlapSphere(hit.point, _player.GetComponent<Unit>().AttackRange);
             Collider nearestUnit = null;
 
             foreach (Collider collider in nearObjects)
             {
-                if (collider.GetComponent<Unit>())
+                if (collider.GetComponent<Unit>() && collider.gameObject != _player)
                 {              
                     if (nearestUnit == null)
                     nearestUnit = collider;
 
-                    else if (Vector3.Distance(collider.transform.position, hit.transform.position) < Vector3.Distance(nearestUnit.transform.position, hit.transform.position))
+                    else if (Vector3.Distance(collider.transform.position, hit.point) < Vector3.Distance(nearestUnit.transform.position, hit.point))
                     {
                         nearestUnit = collider;
                     }
                 }
             }
 
-            _player.GetComponent<Unit>().MoveToAttack(nearestUnit.gameObject);
+            if (nearestUnit != null)
+            {
+                _player.GetComponent<Unit>().MoveToAttack(nearestUnit.gameObject);
+            }
+            else
+            {
+                _player.GetComponent<Unit>().Move(hit.point);
+            }
+
+            _particleManager.AttackParticle(hit.point);
 
         }
 
@@ -92,6 +104,7 @@ public class InputController : MonoBehaviour
 
             Physics.Raycast(ray, out hit);
             _player.GetComponent<Unit>().Move(hit.point);
+            _particleManager.MoveParticle(hit.point);
         }
 
         if (Input.GetMouseButtonUp(0))

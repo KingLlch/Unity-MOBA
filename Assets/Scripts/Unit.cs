@@ -80,7 +80,7 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
 
     public IEnumerator AttackCorutine(GameObject target)
     {
-        while (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange + 0.1)
+        while (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange)
         {
             GameObject attackParticle = Instantiate(AttackParticlePrefab, transform.position, Quaternion.identity, null);
 
@@ -107,7 +107,7 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
                     _attackCoroutine = null;
                 }
 
-                Vector3 point = target.transform.position - ((target.transform.position - transform.position).normalized * AttackRange);
+                Vector3 point = target.transform.position - ((target.transform.position - transform.position).normalized * (AttackRange - 0.1f));
                 gameObject.GetComponent<NavMeshAgent>().SetDestination(new Vector3(point.x, gameObject.transform.position.y, point.z));
 
             }
