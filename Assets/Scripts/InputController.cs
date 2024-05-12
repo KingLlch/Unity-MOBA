@@ -16,6 +16,11 @@ public class InputController : MonoBehaviour
     [HideInInspector] public UnityEvent<Unit> ChangeSelectUnit;
     [HideInInspector] public UnityEvent DeSelectUnit;
 
+    [HideInInspector] public UnityEvent<Unit, RaycastHit> Cast1Spell;
+    [HideInInspector] public UnityEvent<Unit, RaycastHit> Cast2Spell;
+    [HideInInspector] public UnityEvent<Unit, RaycastHit> Cast3Spell;
+    [HideInInspector] public UnityEvent<Unit, RaycastHit> Cast4Spell;
+
     private void Awake()
     {
         _mainCamera = Camera.main;
@@ -43,10 +48,7 @@ public class InputController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1) && _isHeroSelect)
         {
-            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            Physics.Raycast(ray, out hit);
+            RaycastHit hit = RayCast();
 
             if (hit.collider.gameObject.GetComponent<Unit>() && (hit.collider.gameObject != _player.gameObject))
             {
@@ -62,10 +64,7 @@ public class InputController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A) && _isHeroSelect)
         {
-            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            Physics.Raycast(ray, out hit);
+            RaycastHit hit = RayCast();
 
             Collider[] nearObjects = Physics.OverlapSphere(hit.point, _player.GetComponent<Unit>().AttackRange);
             Collider nearestUnit = null;
@@ -99,20 +98,15 @@ public class InputController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.M) && _isHeroSelect)
         {
-            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            RaycastHit hit = RayCast();
 
-            Physics.Raycast(ray, out hit);
             _player.GetComponent<Unit>().Move(hit.point);
             _particleManager.MoveParticle(hit.point);
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            Physics.Raycast(ray, out hit);
+            RaycastHit hit = RayCast();
             Unit unit = null;
 
             if (hit.collider.GetComponent<Unit>())
@@ -145,5 +139,38 @@ public class InputController : MonoBehaviour
                 _isHeroSelect = false;
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Q) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[0] == 0)
+        {
+            RaycastHit hit = RayCast();
+            Cast1Spell.Invoke(transform.GetComponent<Unit>(), hit);
+        }
+
+        if (Input.GetKeyDown(KeyCode.W) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[1] == 0)
+        {
+            RaycastHit hit = RayCast();
+            Cast2Spell.Invoke(transform.GetComponent<Unit>(), hit);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[2] == 0)
+        {
+            RaycastHit hit = RayCast();
+            Cast3Spell.Invoke(transform.GetComponent<Unit>(), hit);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[3] == 0)
+        {
+            RaycastHit hit = RayCast();
+            Cast4Spell.Invoke(transform.GetComponent<Unit>(), hit);
+        }
+    }
+
+    private RaycastHit RayCast()
+    {
+        Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        Physics.Raycast(ray, out hit);
+        return hit;
     }
 }

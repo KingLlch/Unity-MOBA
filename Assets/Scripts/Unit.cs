@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -17,12 +18,19 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
     [field: SerializeField] public int Damage { get; private set; } = 5;
     [field: SerializeField] public int AttackSpeed { get; private set; } = 100;
     [field: SerializeField] public int AttackRange { get; private set; } = 10;
+    [field: SerializeField] public int CastRange { get; private set; } = 2;
     [field: SerializeField] public int ParticleSpeed { get; private set; } = 10;
+
+    [field: SerializeField] public int[] Cooldown { get; private set; } = { 0, 0, 0, 10 };
+
+    [HideInInspector] public List<Spell> Spells;
 
     [SerializeField] private GameObject AttackParticlePrefab;
     public bool IsAttacking;
 
     [HideInInspector] public UnityEvent<Unit> ChangeHealthOrMana;
+    [HideInInspector] public UnityEvent<Unit> ChangeCooldown;
+
 
     private Coroutine _attackCoroutine;
     private Coroutine _moveAttackCoroutine;
@@ -32,7 +40,11 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
         MaxHealth = Health;
         MaxMana = Mana;
 
+        //нужно добавить условие героя
+        Spells = SpellList.LinaSpells;
+
         StartCoroutine(RegenCorutine());
+        StartCoroutine(CooldownCorutine());
     }
 
     public void ApplyDamage(int damage)
@@ -41,6 +53,7 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
 
         if (Health <= 0)
         {
+            StopAllCoroutines();
             Destroy(gameObject);
         }
 
@@ -130,6 +143,23 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
 
             ChangeHealthOrMana.Invoke(GetComponent<Unit>());
 
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    public IEnumerator CooldownCorutine()
+    {
+        while (true)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (Cooldown[i] > 0)
+                {
+                    Cooldown[i]--;
+                }
+            }         
+
+            ChangeCooldown.Invoke(GetComponent<Unit>());
             yield return new WaitForSeconds(1f);
         }
     }

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,10 +11,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _heroImage;
     [SerializeField] private GameObject _spels;
     [SerializeField] private GameObject _inventory;
+
     [SerializeField] private TextMeshProUGUI _healtUI;
     [SerializeField] private TextMeshProUGUI _manaUI;
     [SerializeField] private TextMeshProUGUI _healtRegenUI;
     [SerializeField] private TextMeshProUGUI _manaRegenUI;
+
+    [SerializeField] private UnityEngine.UI.Image[] _spelsCooldown;
     [SerializeField] private UnityEngine.UI.Image _healtImage;
     [SerializeField] private UnityEngine.UI.Image _manaImage;
 
@@ -83,16 +87,28 @@ public class UIManager : MonoBehaviour
         ShowUI();
         ChangeUI(unit);
         unit.ChangeHealthOrMana.AddListener(ChangeUI);
+        unit.ChangeCooldown.AddListener(ChangeCooldown);
     }
 
     private void ChangeSelectUnit(Unit unit)
     {
         if (unit != null)
-        unit.ChangeHealthOrMana.RemoveAllListeners();
+        {
+            unit.ChangeHealthOrMana.RemoveAllListeners();
+            unit.ChangeCooldown.RemoveAllListeners();
+        }
     }
 
     private void DeSelectUnit()
     {
         HideUI();
+    }
+
+    private void ChangeCooldown(Unit unit)
+    {
+        for (int i = 0; i < unit.Spells.Count; i++)
+        {
+            _spelsCooldown[i].fillAmount = unit.Cooldown[i] / unit.Spells[i].Cooldown;
+        }
     }
 }
