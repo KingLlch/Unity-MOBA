@@ -15,23 +15,23 @@ public class SpellsController : MonoBehaviour
         _inputController.Cast4Spell.AddListener(Cast4Spell);
     }
 
-    private void Cast1Spell(Unit StartUnit, RaycastHit position)
+    private void Cast1Spell(Unit startUnit, RaycastHit position)
     {
-
+        startUnit.Cooldown[0] = startUnit.Spells[0].Cooldown;
     }
 
-    private void Cast2Spell(Unit StartUnit, RaycastHit position)
+    private void Cast2Spell(Unit startUnit, RaycastHit position)
     {
-
+        startUnit.Cooldown[1] = startUnit.Spells[1].Cooldown;
     }
 
-    private void Cast3Spell(Unit StartUnit, RaycastHit position)
+    private void Cast3Spell(Unit startUnit, RaycastHit position)
     {
-
+        startUnit.Cooldown[2] = startUnit.Spells[2].Cooldown;
     }
 
-    private void Cast4Spell(Unit StartUnit, RaycastHit position)
+    private void Cast4Spell(Unit startUnit, RaycastHit position)
     {
-
+        startUnit.Cooldown[3] = startUnit.Spells[3].Cooldown;
     }
 }

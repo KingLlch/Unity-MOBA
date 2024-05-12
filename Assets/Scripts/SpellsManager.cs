@@ -10,7 +10,7 @@ public struct Spell
 
     public int Damage;
     public float Duration;
-    public float Cooldown;
+    public int Cooldown;
     public float Characteristic;
 
     public bool IsCon;
@@ -21,7 +21,7 @@ public struct Spell
     public bool IsPassive;
 
 
-    public Spell(string name, string description, int damage, float duration, float cooldown,
+    public Spell(string name, string description, int damage, float duration, int cooldown,
         float characteristic, bool isActive = false, bool isPassive = false, bool isCon = false, bool isSphere = false, bool isLine = false)
     {
         Name = name;

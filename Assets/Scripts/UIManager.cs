@@ -108,7 +108,7 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < unit.Spells.Count; i++)
         {
-            _spelsCooldown[i].fillAmount = unit.Cooldown[i] / unit.Spells[i].Cooldown;
+            _spelsCooldown[i].fillAmount = (float) unit.Cooldown[i] / unit.Spells[i].Cooldown;
         }
     }
 }

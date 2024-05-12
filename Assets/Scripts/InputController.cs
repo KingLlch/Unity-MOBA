@@ -143,25 +143,25 @@ public class InputController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[0] == 0)
         {
             RaycastHit hit = RayCast();
-            Cast1Spell.Invoke(transform.GetComponent<Unit>(), hit);
+            Cast1Spell.Invoke(_player.GetComponent<Unit>(), hit);
         }
 
         if (Input.GetKeyDown(KeyCode.W) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[1] == 0)
         {
             RaycastHit hit = RayCast();
-            Cast2Spell.Invoke(transform.GetComponent<Unit>(), hit);
+            Cast2Spell.Invoke(_player.GetComponent<Unit>(), hit);
         }
 
         if (Input.GetKeyDown(KeyCode.E) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[2] == 0)
         {
             RaycastHit hit = RayCast();
-            Cast3Spell.Invoke(transform.GetComponent<Unit>(), hit);
+            Cast3Spell.Invoke(_player.GetComponent<Unit>(), hit);
         }
 
         if (Input.GetKeyDown(KeyCode.R) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[3] == 0)
         {
             RaycastHit hit = RayCast();
-            Cast4Spell.Invoke(transform.GetComponent<Unit>(), hit);
+            Cast4Spell.Invoke(_player.GetComponent<Unit>(), hit);
         }
     }
 
