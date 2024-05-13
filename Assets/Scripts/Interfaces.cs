@@ -1,9 +1,19 @@
-public interface IDamageable
+public interface IHealthDamageable
 {
-    public void ApplyDamage(int damage);
+    public void ApplyHealthDamage(int damage);
 }
 
-public interface IHealable
+public interface IHealthHealable
 {
-    public void ApplyHeal(int heal);
+    public void ApplyHealthHeal(int heal);
+}
+
+public interface IManaHealable
+{
+    public void ApplyManaHeal(int heal);
+}
+
+public interface IManaDamageable
+{
+    public void ApplyManaDamage(int damage);
 }

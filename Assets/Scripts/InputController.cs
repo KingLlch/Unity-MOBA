@@ -9,7 +9,7 @@ public class InputController : MonoBehaviour
 
     private Camera _mainCamera;
     private GameObject _player;
-    private bool _isHeroSelect = true;
+    private bool _isHeroSelect = false;
     private Unit selectedUnit;
 
     [HideInInspector] public UnityEvent<Unit> SelectUnit;
@@ -140,25 +140,25 @@ public class InputController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[0] == 0)
+        if (Input.GetKeyDown(KeyCode.Q) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[0] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[0].ManaCost)
         {
             RaycastHit hit = RayCast();
             Cast1Spell.Invoke(_player.GetComponent<Unit>(), hit);
         }
 
-        if (Input.GetKeyDown(KeyCode.W) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[1] == 0)
+        if (Input.GetKeyDown(KeyCode.W) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[1] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[1].ManaCost)
         {
             RaycastHit hit = RayCast();
             Cast2Spell.Invoke(_player.GetComponent<Unit>(), hit);
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[2] == 0)
+        if (Input.GetKeyDown(KeyCode.E) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[2] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[2].ManaCost)
         {
             RaycastHit hit = RayCast();
             Cast3Spell.Invoke(_player.GetComponent<Unit>(), hit);
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[3] == 0)
+        if (Input.GetKeyDown(KeyCode.R) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[3] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[3].ManaCost)
         {
             RaycastHit hit = RayCast();
             Cast4Spell.Invoke(_player.GetComponent<Unit>(), hit);

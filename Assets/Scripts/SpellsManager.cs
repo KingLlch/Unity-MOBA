@@ -9,32 +9,49 @@ public struct Spell
 
 
     public int Damage;
-    public float Duration;
     public int Cooldown;
-    public float Characteristic;
+    public int ManaCost;
+    public float CastDelay;
 
     public bool IsCon;
+    public float ConAngle;
+
     public bool IsSphere;
+    public float SphereRadius;
+
     public bool IsLine;
+    public float LineWidtn;
+    public float LineDistance;
 
     public bool IsActive;
     public bool IsPassive;
 
 
-    public Spell(string name, string description, int damage, float duration, int cooldown,
-        float characteristic, bool isActive = false, bool isPassive = false, bool isCon = false, bool isSphere = false, bool isLine = false)
+    public Spell(string name, string description,
+        int damage, int cooldown, int manaCost,
+        float castDelay, 
+        bool isActive = false, bool isPassive = false, bool isSwitchable = false,
+        bool isCon = false, float conAngle = 0, 
+        bool isSphere = false, float sphereRadius = 0, 
+        bool isLine = false, float lineWidth = 0, float lineDistance = 0)
     {
         Name = name;
         Description = description;
 
         Damage = damage;
-        Duration = duration;
         Cooldown = cooldown;
-        Characteristic = characteristic;
+        ManaCost = manaCost;
+        CastDelay = castDelay;
 
         IsCon = isCon;  
+        ConAngle = conAngle;
+
         IsSphere = isSphere;
+        SphereRadius = sphereRadius;
+
         IsLine = isLine;
+        LineWidtn = lineWidth;
+        LineDistance = lineDistance;
 
         IsActive = isActive;
         IsPassive = isPassive;
@@ -51,9 +68,15 @@ public class SpellsManager : MonoBehaviour
 {
     private void Awake()
     {
-        SpellList.LinaSpells.Add(new Spell("Dragon Slave", "/", 1, 1, 10, 1, true, false, true));
+        SpellList.LinaSpells.Add(new Spell("Dragon Slave", "/", 
+            100, 1, 10, 
+            1, true, false, true));
+
+
+
+
         SpellList.LinaSpells.Add(new Spell("Light Strike Array", "/", 1, 1, 10, 1, true, false, true));
-        SpellList.LinaSpells.Add(new Spell("Fiery Soul", "/", 1, 1, 10, 1, false, true, true));
-        SpellList.LinaSpells.Add(new Spell("Laguna Blade", "/", 1, 1, 10, 1, true, false, true));
+        SpellList.LinaSpells.Add(new Spell("Fiery Soul", "/", 1, 10, 10, 1, false, true, true));
+        SpellList.LinaSpells.Add(new Spell("Laguna Blade", "/", 1, 10, 10, 1, true, false, true));
     }
 }

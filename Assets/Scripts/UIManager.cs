@@ -11,11 +11,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _heroImage;
     [SerializeField] private GameObject _spels;
     [SerializeField] private GameObject _inventory;
+    [SerializeField] private GameObject[] _spelsDescription;
 
     [SerializeField] private TextMeshProUGUI _healtUI;
     [SerializeField] private TextMeshProUGUI _manaUI;
     [SerializeField] private TextMeshProUGUI _healtRegenUI;
     [SerializeField] private TextMeshProUGUI _manaRegenUI;
+    [SerializeField] private TextMeshProUGUI[] _spellsNameUI;
+    [SerializeField] private TextMeshProUGUI[] _spellsDescriptionUI;
 
     [SerializeField] private UnityEngine.UI.Image[] _spelsCooldown;
     [SerializeField] private UnityEngine.UI.Image _healtImage;
@@ -63,6 +66,7 @@ public class UIManager : MonoBehaviour
     {
         _healtImage.gameObject.transform.parent.gameObject.SetActive(true);
         _manaImage.gameObject.transform.parent.gameObject.SetActive(true);
+
         _spels.SetActive(true);
         _heroImage.SetActive(true);
         _inventory.SetActive(true);
@@ -77,9 +81,15 @@ public class UIManager : MonoBehaviour
         _manaRegenUI.text = "+" + unit.ManaRegen;
 
         if (unit.MaxHealth != 0)
-            _healtImage.fillAmount = unit.Health / unit.MaxHealth;
+            _healtImage.fillAmount = (float) unit.Health / unit.MaxHealth;
         if (unit.MaxMana != 0)
-            _manaImage.fillAmount = unit.Mana / unit.MaxMana;
+            _manaImage.fillAmount = (float) unit.Mana / unit.MaxMana;
+
+        for (int i = 0; i < _spellsNameUI.Length; i++)
+        {
+            _spellsNameUI[i].text = unit.Spells[i].Name;
+            _spellsDescriptionUI[i].text = unit.Spells[i].Description;
+        }
     }
 
     private void SelectUnit(Unit unit)
@@ -110,5 +120,15 @@ public class UIManager : MonoBehaviour
         {
             _spelsCooldown[i].fillAmount = (float) unit.Cooldown[i] / unit.Spells[i].Cooldown;
         }
+    }
+
+    public void ShowDescription(int number)
+    {
+        _spelsDescription[number].SetActive(true);
+    }
+
+    public void HideDescription(int number)
+    {
+        _spelsDescription[number].SetActive(false);
     }
 }

@@ -25,7 +25,7 @@ public class AttackParticle : MonoBehaviour
         {
             destroy = true;
             gameObject.transform.DOKill();
-            Target.GetComponent<Unit>().ApplyDamage(StartUnit.Damage);
+            Target.GetComponent<Unit>().ApplyHealthDamage(StartUnit.Damage);
             StopCoroutine(MoveParticle());
             Destroy(gameObject);
         }

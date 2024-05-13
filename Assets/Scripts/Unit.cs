@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
-public class Unit : MonoBehaviour, IDamageable, IHealable
+public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHealable, IManaHealable
 {
     [field: SerializeField] public int Health { get; private set; } = 100;
     [field: SerializeField] public int MaxHealth { get; private set; }
@@ -47,7 +47,7 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
         StartCoroutine(CooldownCorutine());
     }
 
-    public void ApplyDamage(int damage)
+    public void ApplyHealthDamage(int damage)
     {
         Health -= damage;
 
@@ -59,8 +59,13 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
 
         ChangeHealthOrMana.Invoke(GetComponent<Unit>());
     }
+    public void ApplyManaDamage(int damage)
+    {
+        Mana -= damage;
+        ChangeHealthOrMana.Invoke(GetComponent<Unit>());
+    }
 
-    public void ApplyHeal(int heal)
+    public void ApplyHealthHeal(int heal)
     {
         Health += heal;
         ChangeHealthOrMana.Invoke(GetComponent<Unit>());
@@ -138,7 +143,7 @@ public class Unit : MonoBehaviour, IDamageable, IHealable
     {
         while (true)
         {
-            if (Health < MaxHealth) ApplyHeal(HealthRegen);
+            if (Health < MaxHealth) ApplyHealthHeal(HealthRegen);
             if (Mana < MaxMana) ApplyManaHeal(ManaRegen);
 
             ChangeHealthOrMana.Invoke(GetComponent<Unit>());
