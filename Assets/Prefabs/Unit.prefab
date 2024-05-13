@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5512177818453560362}
   - component: {fileID: 4303704980999684683}
   - component: {fileID: 7484485071858891849}
+  - component: {fileID: -4272657181584341385}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -100,7 +101,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -129,9 +130,41 @@ MonoBehaviour:
   <Damage>k__BackingField: 0
   <AttackSpeed>k__BackingField: 0
   <AttackRange>k__BackingField: 1
+  <CastRange>k__BackingField: 2
   <ParticleSpeed>k__BackingField: 50
+  <Cooldown>k__BackingField: 00000000000000000000000000000000
   AttackParticlePrefab: {fileID: 2024143108107892597, guid: c13fc75f5dfa76243934128ea78817ee, type: 3}
   IsAttacking: 0
   ChangeHealthOrMana:
     m_PersistentCalls:
       m_Calls: []
+  ChangeCooldown:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!54 &-4272657181584341385
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5927607683612616054}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

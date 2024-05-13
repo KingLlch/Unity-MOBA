@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6831759634981253940}
   - component: {fileID: 3879491220959620366}
   - component: {fileID: -3622120664921397090}
-  - component: {fileID: 8916441801852089277}
   m_Layer: 6
   m_Name: AttackParticle
   m_TagString: Untagged
@@ -93,7 +92,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024143108107892597}
-  m_Material: {fileID: 13400000, guid: fa0f1e3fc213ca642ac288bb4595d006, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -102,7 +101,7 @@ SphereCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
@@ -119,32 +118,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8954976b9cb41c6479796b7aea55ed2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startUnit: {fileID: 0}
-  target: {fileID: 0}
---- !u!54 &8916441801852089277
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2024143108107892597}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  Target: {fileID: 0}
+  StartUnit: {fileID: 0}
+  Speed: 0

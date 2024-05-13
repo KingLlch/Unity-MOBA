@@ -19,9 +19,9 @@ public class AttackParticle : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider target)
     {
-        if (collision.gameObject == Target.gameObject)
+        if (target.gameObject == Target.gameObject)
         {
             destroy = true;
             gameObject.transform.DOKill();
