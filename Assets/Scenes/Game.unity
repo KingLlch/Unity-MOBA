@@ -7152,7 +7152,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputController: {fileID: 120264542}
-  _testSpell: {fileID: 7936295174277838220, guid: 0b7c232394d12bb428434b31cc4f4241, type: 3}
+  _dragonSlave: {fileID: 7936295174277838220, guid: 0b7c232394d12bb428434b31cc4f4241, type: 3}
+  _lightStrikeArray: {fileID: 7936295174277838220, guid: 4d4254e126200fe4794e8621982edc31, type: 3}
 --- !u!1 &861373763
 GameObject:
   m_ObjectHideFlags: 0

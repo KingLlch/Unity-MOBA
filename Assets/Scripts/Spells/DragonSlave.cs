@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class DragonSlave : MonoBehaviour
 {
+    [HideInInspector] public Unit StartUnit;
     private List<Unit> _targets = new List<Unit>();
 
-    public IEnumerator DragonSlaveCoroutine(Vector3 target)
+    public IEnumerator Spell(Vector3 target)
     {
-         Vector3 startPosition = transform.position;
+        Vector3 startPosition = transform.position;
 
         while (true) 
         {
@@ -32,9 +32,7 @@ public class DragonSlave : MonoBehaviour
         if (target.GetComponent<Unit>() && target.gameObject.tag != "Player" && !_targets.Contains(target.GetComponent<Unit>()))
         {
             _targets.Add(target.GetComponent<Unit>());
-
-            Debug.Log("DealDamage");
-            target.gameObject.GetComponent<Unit>().ApplyHealthDamage(SpellList.LinaSpells[0].Damage);
+            target.gameObject.GetComponent<Unit>().ApplyHealthDamage(StartUnit.Spells[0].Damage);
         }
     }
 }

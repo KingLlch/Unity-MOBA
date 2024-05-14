@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public struct Spell
@@ -13,16 +12,6 @@ public struct Spell
     public int ManaCost;
     public float CastDelay;
 
-    public bool IsCon;
-    public float ConAngle;
-
-    public bool IsSphere;
-    public float SphereRadius;
-
-    public bool IsLine;
-    public float LineWidtn;
-    public float LineDistance;
-
     public bool IsActive;
     public bool IsPassive;
 
@@ -30,10 +19,7 @@ public struct Spell
     public Spell(string name, string description,
         int damage, int cooldown, int manaCost,
         float castDelay, 
-        bool isActive = false, bool isPassive = false, bool isSwitchable = false,
-        bool isCon = false, float conAngle = 0, 
-        bool isSphere = false, float sphereRadius = 0, 
-        bool isLine = false, float lineWidth = 0, float lineDistance = 0)
+        bool isActive = false, bool isPassive = false, bool isSwitchable = false)
     {
         Name = name;
         Description = description;
@@ -42,16 +28,6 @@ public struct Spell
         Cooldown = cooldown;
         ManaCost = manaCost;
         CastDelay = castDelay;
-
-        IsCon = isCon;  
-        ConAngle = conAngle;
-
-        IsSphere = isSphere;
-        SphereRadius = sphereRadius;
-
-        IsLine = isLine;
-        LineWidtn = lineWidth;
-        LineDistance = lineDistance;
 
         IsActive = isActive;
         IsPassive = isPassive;
