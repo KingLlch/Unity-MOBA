@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -34,6 +35,7 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
 
     private Coroutine _attackCoroutine;
     private Coroutine _moveAttackCoroutine;
+    private Coroutine _moveCastCoroutine;
 
     private void Awake()
     {
@@ -86,6 +88,12 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
 
         _moveAttackCoroutine = StartCoroutine(MoveAttackCorutine(target));
     }
+
+    public void MoveToCast(RaycastHit target, int numberSpell)
+    {
+        _moveCastCoroutine = StartCoroutine(MoveCastCorutine(target, numberSpell));
+    }
+
     public void Attack(GameObject target)
     {
         if (_attackCoroutine != null)
@@ -117,7 +125,7 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
 
         while (true)
         {
-            if (Vector3.Distance(gameObject.transform.position, target.transform.position) >= AttackRange)
+            if (Vector3.Distance(gameObject.transform.position, target.transform.position) > AttackRange)
             {
                 if (_attackCoroutine != null)
                 {
@@ -125,14 +133,36 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
                     _attackCoroutine = null;
                 }
 
-                Vector3 point = target.transform.position - ((target.transform.position - transform.position).normalized * (AttackRange - 0.1f));
-                gameObject.GetComponent<NavMeshAgent>().SetDestination(new Vector3(point.x, gameObject.transform.position.y, point.z));
-
+                Move(target.transform.position - ((target.transform.position - transform.position).normalized * (AttackRange - 0.1f)));
             }
 
             else if (_attackCoroutine == null)
             {
                 Attack(target);
+            }
+
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    public IEnumerator MoveCastCorutine(RaycastHit target, int numberSpell)
+    {
+        while (true)
+        {
+            if (Vector3.Distance(gameObject.transform.position, target.point) > Spells[numberSpell].CastRange)
+            {
+                Move(target.point - ((target.point - transform.position).normalized * (Spells[numberSpell].CastRange - 0.1f)));
+            }
+
+            else
+            {
+                InputController.Instance.CastSpell.Invoke(this, target, numberSpell);
+
+                if (_moveCastCoroutine != null)
+                {
+                    StopCoroutine(_moveCastCoroutine);
+                    _moveCastCoroutine = null;
+                }
             }
 
             yield return new WaitForSeconds(0.5f);
@@ -180,6 +210,11 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
         {
             StopCoroutine(_moveAttackCoroutine);
             _moveAttackCoroutine = null;
+        }
+        if (_moveCastCoroutine != null)
+        {
+            StopCoroutine(_moveCastCoroutine);
+            _moveCastCoroutine = null;
         }
 
         gameObject.GetComponent<NavMeshAgent>().SetDestination(new Vector3(target.x, gameObject.transform.position.y, target.z));

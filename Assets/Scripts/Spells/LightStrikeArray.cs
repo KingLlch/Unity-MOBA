@@ -11,7 +11,7 @@ public class LightStrikeArray : MonoBehaviour
     {
         yield return new WaitForSeconds(StartUnit.Spells[1].CastDelay);
 
-        transform.position = target;
+        //transform.position = target;
         transform.GetComponent<CapsuleCollider>().enabled = true;
 
         yield return new WaitForSeconds(1);

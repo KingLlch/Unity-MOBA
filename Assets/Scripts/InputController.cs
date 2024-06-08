@@ -16,13 +16,30 @@ public class InputController : MonoBehaviour
     [HideInInspector] public UnityEvent<Unit> ChangeSelectUnit;
     [HideInInspector] public UnityEvent DeSelectUnit;
 
-    [HideInInspector] public UnityEvent<Unit, RaycastHit> Cast1Spell;
-    [HideInInspector] public UnityEvent<Unit, RaycastHit> Cast2Spell;
-    [HideInInspector] public UnityEvent<Unit, RaycastHit> Cast3Spell;
-    [HideInInspector] public UnityEvent<Unit, RaycastHit> Cast4Spell;
+    [HideInInspector] public UnityEvent<Unit, RaycastHit, int> CastSpell;
+
+    private static InputController _instance;
+
+    public static InputController Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<InputController>();
+            }
+
+            return _instance;
+        }
+    }
 
     private void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+
         _mainCamera = Camera.main;
         _player = GameObject.Find("Player");
     }
@@ -129,6 +146,7 @@ public class InputController : MonoBehaviour
                 }
 
                 if (hit.collider.gameObject.name == "Player") _isHeroSelect = true;
+                else _isHeroSelect = false;
             }
 
             else
@@ -143,25 +161,53 @@ public class InputController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[0] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[0].ManaCost)
         {
             RaycastHit hit = RayCast();
-            Cast1Spell.Invoke(_player.GetComponent<Unit>(), hit);
+
+            if (Vector3.Distance(_player.transform.position,hit.point) < _player.GetComponent<Unit>().Spells[0].CastRange)
+                CastSpell.Invoke(_player.GetComponent<Unit>(), hit, 0);
+
+            else
+            {
+                _player.GetComponent<Unit>().MoveToCast(hit, 0);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.W) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[1] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[1].ManaCost)
         {
             RaycastHit hit = RayCast();
-            Cast2Spell.Invoke(_player.GetComponent<Unit>(), hit);
+
+            if (Vector3.Distance(_player.transform.position, hit.point) < _player.GetComponent<Unit>().Spells[1].CastRange)
+                CastSpell.Invoke(_player.GetComponent<Unit>(), hit, 1);
+
+            else
+            {
+                _player.GetComponent<Unit>().MoveToCast(hit, 1);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.E) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[2] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[2].ManaCost)
         {
             RaycastHit hit = RayCast();
-            Cast3Spell.Invoke(_player.GetComponent<Unit>(), hit);
+
+            if (Vector3.Distance(_player.transform.position, hit.point) < _player.GetComponent<Unit>().Spells[2].CastRange)
+                CastSpell.Invoke(_player.GetComponent<Unit>(), hit, 2);
+
+            else
+            {
+                _player.GetComponent<Unit>().MoveToCast(hit, 2);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.R) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[3] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[3].ManaCost)
         {
             RaycastHit hit = RayCast();
-            Cast4Spell.Invoke(_player.GetComponent<Unit>(), hit);
+
+            if (Vector3.Distance(_player.transform.position, hit.point) < _player.GetComponent<Unit>().Spells[3].CastRange)
+                CastSpell.Invoke(_player.GetComponent<Unit>(), hit, 3);
+
+            else
+            {
+                _player.GetComponent<Unit>().MoveToCast(hit, 3);
+            }
         }
     }
 

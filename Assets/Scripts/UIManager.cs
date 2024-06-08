@@ -4,7 +4,6 @@ using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
-    private InputController _inputController;
     private TextMeshProUGUI _time;
 
     [SerializeField] private GameObject _pausePanel;
@@ -27,10 +26,9 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         _time = GameObject.Find("MainCanvas/MainPanel/TimePanel/TimeText").GetComponent<TextMeshProUGUI>();
-        _inputController = FindObjectOfType<InputController>();
-        _inputController.SelectUnit.AddListener(SelectUnit);
-        _inputController.ChangeSelectUnit.AddListener(ChangeSelectUnit);
-        _inputController.DeSelectUnit.AddListener(DeSelectUnit);
+        InputController.Instance.SelectUnit.AddListener(SelectUnit);
+        InputController.Instance.ChangeSelectUnit.AddListener(ChangeSelectUnit);
+        InputController.Instance.DeSelectUnit.AddListener(DeSelectUnit);
     }
 
     public void ChangeTimeUI(int timeSeconds, int timeMinuts)
