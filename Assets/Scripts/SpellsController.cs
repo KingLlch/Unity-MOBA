@@ -15,9 +15,9 @@ public class SpellsController : MonoBehaviour
         startUnit.Cooldown[numberSpell] = startUnit.Spells[numberSpell].Cooldown;
         startUnit.ApplyManaDamage(startUnit.Spells[numberSpell].ManaCost);
 
-        if (numberSpell == 0)
+        if ((numberSpell == 0) && startUnit.Spells[numberSpell].Name == "Dragon Slave")
         {
-            GameObject spell = Instantiate(_dragonSlave,startUnit.transform.position,Quaternion.LookRotation(position.point - startUnit.transform.position) * Quaternion.Euler(90,0,0), null);
+            GameObject spell = Instantiate(_dragonSlave,startUnit.transform.position, Quaternion.LookRotation(position.point - startUnit.transform.position) * Quaternion.Euler(90,0,0), null);
             spell.GetComponent<DragonSlave>().StartUnit = startUnit;
             StartCoroutine(spell.GetComponent<DragonSlave>().Spell(position.point));         
         }

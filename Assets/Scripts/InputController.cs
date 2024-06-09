@@ -167,6 +167,7 @@ public class InputController : MonoBehaviour
 
             else
             {
+                _particleManager.CastParticle(hit.point);
                 _player.GetComponent<Unit>().MoveToCast(hit, 0);
             }
         }
@@ -180,6 +181,7 @@ public class InputController : MonoBehaviour
 
             else
             {
+                _particleManager.CastParticle(hit.point);
                 _player.GetComponent<Unit>().MoveToCast(hit, 1);
             }
         }
@@ -193,6 +195,7 @@ public class InputController : MonoBehaviour
 
             else
             {
+                _particleManager.CastParticle(hit.point);
                 _player.GetComponent<Unit>().MoveToCast(hit, 2);
             }
         }
@@ -206,6 +209,7 @@ public class InputController : MonoBehaviour
 
             else
             {
+                _particleManager.CastParticle(hit.point);
                 _player.GetComponent<Unit>().MoveToCast(hit, 3);
             }
         }

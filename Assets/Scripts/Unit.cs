@@ -81,25 +81,21 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
 
     public void MoveToAttack(GameObject target)
     {
-        if (_moveAttackCoroutine != null)
-        {
-            StopCoroutine(_moveAttackCoroutine);
-        }
+        StopCoroutines();
 
         _moveAttackCoroutine = StartCoroutine(MoveAttackCorutine(target));
     }
 
     public void MoveToCast(RaycastHit target, int numberSpell)
     {
+        StopCoroutines();
+
         _moveCastCoroutine = StartCoroutine(MoveCastCorutine(target, numberSpell));
     }
 
     public void Attack(GameObject target)
     {
-        if (_attackCoroutine != null)
-        {
-            StopCoroutine(_attackCoroutine);
-        }
+        StopCoroutines();
 
         _attackCoroutine = StartCoroutine(AttackCorutine(target));
     }
@@ -127,16 +123,10 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
         {
             if (Vector3.Distance(gameObject.transform.position, target.transform.position) > AttackRange)
             {
-                if (_attackCoroutine != null)
-                {
-                    StopCoroutine(_attackCoroutine);
-                    _attackCoroutine = null;
-                }
-
                 Move(target.transform.position - ((target.transform.position - transform.position).normalized * (AttackRange - 0.1f)));
             }
 
-            else if (_attackCoroutine == null)
+            else
             {
                 Attack(target);
             }
@@ -157,12 +147,7 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
             else
             {
                 InputController.Instance.CastSpell.Invoke(this, target, numberSpell);
-
-                if (_moveCastCoroutine != null)
-                {
-                    StopCoroutine(_moveCastCoroutine);
-                    _moveCastCoroutine = null;
-                }
+                yield break;
             }
 
             yield return new WaitForSeconds(0.5f);
@@ -201,6 +186,11 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
 
     public void Move(Vector3 target)
     {
+        gameObject.GetComponent<NavMeshAgent>().SetDestination(new Vector3(target.x, gameObject.transform.position.y, target.z));
+    }
+
+    private void StopCoroutines()
+    {
         if (_attackCoroutine != null)
         {
             StopCoroutine(_attackCoroutine);
@@ -216,7 +206,5 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
             StopCoroutine(_moveCastCoroutine);
             _moveCastCoroutine = null;
         }
-
-        gameObject.GetComponent<NavMeshAgent>().SetDestination(new Vector3(target.x, gameObject.transform.position.y, target.z));
     }
 }
