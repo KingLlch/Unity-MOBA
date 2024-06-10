@@ -145,6 +145,7 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
 
             else
             {
+                StopCoroutines();
                 InputController.Instance.CastSpell.Invoke(this, target, numberSpell);
                 yield break;
             }

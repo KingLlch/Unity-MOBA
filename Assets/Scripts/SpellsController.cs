@@ -17,9 +17,9 @@ public class SpellsController : MonoBehaviour
 
         if ((numberSpell == 0) && startUnit.Spells[numberSpell].Name == "Dragon Slave")
         {
-            GameObject spell = Instantiate(_dragonSlave,startUnit.transform.position, Quaternion.LookRotation(position.point - startUnit.transform.position) * Quaternion.Euler(90,0,0), null);
-            spell.GetComponent<DragonSlave>().StartUnit = startUnit;
-            StartCoroutine(spell.GetComponent<DragonSlave>().Spell(position.point));         
+            GameObject spell = Instantiate(_dragonSlave,startUnit.transform.position, Quaternion.Euler(new Vector3 (90, 0, -(Quaternion.LookRotation(position.point - startUnit.transform.position).eulerAngles.y))), null);
+            spell.GetComponentInChildren<DragonSlave>().StartUnit = startUnit;
+            StartCoroutine(spell.GetComponentInChildren<DragonSlave>().Spell(position.point));         
         }
     }
 }
