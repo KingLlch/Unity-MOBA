@@ -9,6 +9,8 @@ public class InputController : MonoBehaviour
 
     private Camera _mainCamera;
     private GameObject _player;
+    private Unit _playerUnit;
+
     private bool _isHeroSelect = false;
     private Unit selectedUnit;
 
@@ -42,6 +44,7 @@ public class InputController : MonoBehaviour
 
         _mainCamera = Camera.main;
         _player = GameObject.Find("Player");
+        _playerUnit = _player.GetComponent<Unit>();
     }
 
     private void Update()
@@ -69,12 +72,16 @@ public class InputController : MonoBehaviour
 
             if (hit.collider.gameObject.GetComponent<Unit>() && (hit.collider.gameObject != _player.gameObject))
             {
-                _player.GetComponent<Unit>().MoveToAttack(hit.collider.gameObject);
+                _playerUnit.MoveToAttack(hit.collider.gameObject);
                 _particleManager.AttackParticle(hit.point);
             }
             else
             {
-                _player.GetComponent<Unit>().Move(hit.point);
+                _playerUnit.Move(hit.point);
+
+                if (_playerUnit.AttackCoroutine != null)
+                _playerUnit.StopCoroutine(_playerUnit.AttackCoroutine);
+
                 _particleManager.MoveParticle(hit.point);
             }
         }
@@ -83,7 +90,7 @@ public class InputController : MonoBehaviour
         {
             RaycastHit hit = RayCast();
 
-            Collider[] nearObjects = Physics.OverlapSphere(hit.point, _player.GetComponent<Unit>().AttackRange);
+            Collider[] nearObjects = Physics.OverlapSphere(hit.point, _playerUnit.AttackRange);
             Collider nearestUnit = null;
 
             foreach (Collider collider in nearObjects)
@@ -102,11 +109,11 @@ public class InputController : MonoBehaviour
 
             if (nearestUnit != null)
             {
-                _player.GetComponent<Unit>().MoveToAttack(nearestUnit.gameObject);
+                _playerUnit.MoveToAttack(nearestUnit.gameObject);
             }
             else
             {
-                _player.GetComponent<Unit>().Move(hit.point);
+                _playerUnit.Move(hit.point);
             }
 
             _particleManager.AttackParticle(hit.point);
@@ -117,7 +124,7 @@ public class InputController : MonoBehaviour
         {
             RaycastHit hit = RayCast();
 
-            _player.GetComponent<Unit>().Move(hit.point);
+            _playerUnit.Move(hit.point);
             _particleManager.MoveParticle(hit.point);
         }
 
@@ -158,59 +165,59 @@ public class InputController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[0] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[0].ManaCost)
+        if (Input.GetKeyDown(KeyCode.Q) && _isHeroSelect && _playerUnit.Cooldown[0] == 0 && _playerUnit.Mana >= _playerUnit.Spells[0].ManaCost)
         {
             RaycastHit hit = RayCast();
 
-            if (Vector3.Distance(_player.transform.position,hit.point) < _player.GetComponent<Unit>().Spells[0].CastRange)
-                CastSpell.Invoke(_player.GetComponent<Unit>(), hit, 0);
+            if (Vector3.Distance(_player.transform.position,hit.point) < _playerUnit.Spells[0].CastRange)
+                CastSpell.Invoke(_playerUnit, hit, 0);
 
             else
             {
                 _particleManager.CastParticle(hit.point);
-                _player.GetComponent<Unit>().MoveToCast(hit, 0);
+                _playerUnit.MoveToCast(hit, 0);
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.W) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[1] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[1].ManaCost)
+        if (Input.GetKeyDown(KeyCode.W) && _isHeroSelect && _playerUnit.Cooldown[1] == 0 && _playerUnit.Mana >= _playerUnit.Spells[1].ManaCost)
         {
             RaycastHit hit = RayCast();
 
-            if (Vector3.Distance(_player.transform.position, hit.point) < _player.GetComponent<Unit>().Spells[1].CastRange)
-                CastSpell.Invoke(_player.GetComponent<Unit>(), hit, 1);
+            if (Vector3.Distance(_player.transform.position, hit.point) < _playerUnit.Spells[1].CastRange)
+                CastSpell.Invoke(_playerUnit, hit, 1);
 
             else
             {
                 _particleManager.CastParticle(hit.point);
-                _player.GetComponent<Unit>().MoveToCast(hit, 1);
+                _playerUnit.MoveToCast(hit, 1);
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[2] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[2].ManaCost)
+        if (Input.GetKeyDown(KeyCode.E) && _isHeroSelect && _playerUnit.Cooldown[2] == 0 && _playerUnit.Mana >= _playerUnit.Spells[2].ManaCost)
         {
             RaycastHit hit = RayCast();
 
-            if (Vector3.Distance(_player.transform.position, hit.point) < _player.GetComponent<Unit>().Spells[2].CastRange)
-                CastSpell.Invoke(_player.GetComponent<Unit>(), hit, 2);
+            if (Vector3.Distance(_player.transform.position, hit.point) < _playerUnit.Spells[2].CastRange)
+                CastSpell.Invoke(_playerUnit, hit, 2);
 
             else
             {
                 _particleManager.CastParticle(hit.point);
-                _player.GetComponent<Unit>().MoveToCast(hit, 2);
+                _playerUnit.MoveToCast(hit, 2);
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && _isHeroSelect && _player.GetComponent<Unit>().Cooldown[3] == 0 && _player.GetComponent<Unit>().Mana >= _player.GetComponent<Unit>().Spells[3].ManaCost)
+        if (Input.GetKeyDown(KeyCode.R) && _isHeroSelect && _playerUnit.Cooldown[3] == 0 && _playerUnit.Mana >= _playerUnit.Spells[3].ManaCost)
         {
             RaycastHit hit = RayCast();
 
-            if (Vector3.Distance(_player.transform.position, hit.point) < _player.GetComponent<Unit>().Spells[3].CastRange)
-                CastSpell.Invoke(_player.GetComponent<Unit>(), hit, 3);
+            if (Vector3.Distance(_player.transform.position, hit.point) < _playerUnit.Spells[3].CastRange)
+                CastSpell.Invoke(_playerUnit, hit, 3);
 
             else
             {
                 _particleManager.CastParticle(hit.point);
-                _player.GetComponent<Unit>().MoveToCast(hit, 3);
+                _playerUnit.MoveToCast(hit, 3);
             }
         }
     }

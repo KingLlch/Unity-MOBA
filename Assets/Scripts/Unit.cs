@@ -32,9 +32,9 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
     [HideInInspector] public UnityEvent<Unit> ChangeCooldown;
 
 
-    private Coroutine _attackCoroutine;
-    private Coroutine _moveAttackCoroutine;
-    private Coroutine _moveCastCoroutine;
+    public Coroutine AttackCoroutine;
+    public Coroutine MoveAttackCoroutine;
+    public Coroutine MoveCastCoroutine;
 
     private void Awake()
     {
@@ -69,12 +69,16 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
     public void ApplyHealthHeal(int heal)
     {
         Health += heal;
+        if (Health > MaxHealth) Health = MaxHealth;
+
         ChangeHealthOrMana.Invoke(GetComponent<Unit>());
     }
 
     public void ApplyManaHeal(int mana)
     {
         Mana += mana;
+        if (Mana > MaxMana) Mana = MaxMana;
+
         ChangeHealthOrMana.Invoke(GetComponent<Unit>());
     }
 
@@ -82,33 +86,42 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
     {
         StopCoroutines();
 
-        _moveAttackCoroutine = StartCoroutine(MoveAttackCorutine(target));
+        MoveAttackCoroutine = StartCoroutine(MoveAttackCorutine(target));
     }
 
     public void MoveToCast(RaycastHit target, int numberSpell)
     {
         StopCoroutines();
 
-        _moveCastCoroutine = StartCoroutine(MoveCastCorutine(target, numberSpell));
+        MoveCastCoroutine = StartCoroutine(MoveCastCorutine(target, numberSpell));
     }
 
     public void Attack(GameObject target)
     {
         StopCoroutines();
 
-        _attackCoroutine = StartCoroutine(AttackCorutine(target));
+        AttackCoroutine = StartCoroutine(AttackCorutine(target));
     }
 
     public IEnumerator AttackCorutine(GameObject target)
     {
-        while (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange)
+        while (true)
         {
-            GameObject attackParticle = Instantiate(AttackParticlePrefab, transform.position, Quaternion.identity, null);
+            if (Vector3.Distance(gameObject.transform.position, target.transform.position) <= AttackRange)
+            {
+                GameObject attackParticle = Instantiate(AttackParticlePrefab, transform.position, Quaternion.identity, null);
 
-            attackParticle.GetComponent<AttackParticle>().Target = target;
-            attackParticle.GetComponent<AttackParticle>().StartUnit = transform.GetComponent<Unit>();
-            attackParticle.GetComponent<AttackParticle>().Speed = ParticleSpeed;
-            StartCoroutine(attackParticle.GetComponent<AttackParticle>().MoveParticle());
+                attackParticle.GetComponent<AttackParticle>().Target = target;
+                attackParticle.GetComponent<AttackParticle>().StartUnit = transform.GetComponent<Unit>();
+                attackParticle.GetComponent<AttackParticle>().Speed = ParticleSpeed;
+                StartCoroutine(attackParticle.GetComponent<AttackParticle>().MoveParticle());
+            }
+
+            else
+            {
+                Move(target.transform.position - ((target.transform.position - transform.position).normalized * (AttackRange - 0.1f)));
+            }
+
 
             yield return new WaitForSeconds(100 / AttackSpeed);
         }
@@ -177,7 +190,7 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
                 {
                     Cooldown[i]--;
                 }
-            }         
+            }
 
             ChangeCooldown.Invoke(GetComponent<Unit>());
             yield return new WaitForSeconds(1f);
@@ -191,20 +204,20 @@ public class Unit : MonoBehaviour, IHealthDamageable, IManaDamageable, IHealthHe
 
     private void StopCoroutines()
     {
-        if (_attackCoroutine != null)
+        if (AttackCoroutine != null)
         {
-            StopCoroutine(_attackCoroutine);
-            _attackCoroutine = null;
+            StopCoroutine(AttackCoroutine);
+            AttackCoroutine = null;
         }
-        if (_moveAttackCoroutine != null)
+        if (MoveAttackCoroutine != null)
         {
-            StopCoroutine(_moveAttackCoroutine);
-            _moveAttackCoroutine = null;
+            StopCoroutine(MoveAttackCoroutine);
+            MoveAttackCoroutine = null;
         }
-        if (_moveCastCoroutine != null)
+        if (MoveCastCoroutine != null)
         {
-            StopCoroutine(_moveCastCoroutine);
-            _moveCastCoroutine = null;
+            StopCoroutine(MoveCastCoroutine);
+            MoveCastCoroutine = null;
         }
     }
 }

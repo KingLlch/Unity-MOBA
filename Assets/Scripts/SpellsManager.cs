@@ -47,7 +47,7 @@ public class SpellsManager : MonoBehaviour
     private void Awake()
     {
         SpellList.LinaSpells.Add(new Spell("Dragon Slave", "/", 
-            100, 0, 1, 
+            100, 1, 1, 
             1, 10, true, false, true));
 
 

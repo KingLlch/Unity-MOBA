@@ -2192,7 +2192,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d3d33436b0951cc45a7dbe2d1ab40efe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2283,7 +2283,7 @@ MonoBehaviour:
   <AttackRange>k__BackingField: 10
   <CastRange>k__BackingField: 2
   <ParticleSpeed>k__BackingField: 10
-  <Cooldown>k__BackingField: 0100000001000000010000000a000000
+  <Cooldown>k__BackingField: 0200000002000000020000000a000000
   AttackParticlePrefab: {fileID: 2024143108107892597, guid: c13fc75f5dfa76243934128ea78817ee, type: 3}
   IsAttacking: 0
   ChangeHealthOrMana:
@@ -11479,6 +11479,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5512177818453560362, guid: b861bb07f2dab6c48ab3d640f3aea22f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d3d33436b0951cc45a7dbe2d1ab40efe, type: 2}
     - target: {fileID: 5927607683612616054, guid: b861bb07f2dab6c48ab3d640f3aea22f, type: 3}
       propertyPath: m_Name
       value: Unit
